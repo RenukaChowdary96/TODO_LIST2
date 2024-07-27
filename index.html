@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div id="root"></div>
-<script src="https://unpkg.com/react/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/babel-standalone/babel.min.js" crossorigin></script>
-<script src="script.js" type="text/babel"></script>
+<section class="container">
+    <div class="heading">
+        <img class="heading__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/756881/laptop.svg">
+        <h1 class="heading__title">To-Do List</h1>
+    </div>
+    <form class="form">
+        <div>
+            <label class="form__label" for="todo">~ Today I need to ~</label>
+            <input class="form__input"
+                   type="text"
+                   id="todo"
+                   name="to-do"
+                   size="30"
+                   required>
+            <button class="button"><span>Submit</span></button>
+        </div>
+    </form>
+    <div>
+        <ul class="toDoList">
+        </ul>
+    </div>
+</section>
+<script src="script.js"></script>
 </body>
 </html>
 

@@ -1,82 +1,64 @@
-const { useState } = React;
+// IEFE
+(() => {
+  // state variables
+  let toDoListArray = [];
+  // ui variables
+  const form = document.querySelector(".form");
+  const input = form.querySelector(".form__input");
+  const ul = document.querySelector(".toDoList");
 
-const App = () => {
-  const [tasks, setTasks] = useState([]);
-  const [taskInput, setTaskInput] = useState("");
-  const [editingTask, setEditingTask] = useState(null);
-
-  const handleInputChange = (e) => {
-    setTaskInput(e.target.value);
-  };
-
-  const addTask = (e) => {
+  // event listeners
+  form.addEventListener('submit', e => {
+    // prevent default behaviour - Page reload
     e.preventDefault();
-    if (taskInput.trim() === "") return;
-    setTasks([...tasks, { text: taskInput, completed: false }]);
-    setTaskInput("");
-  };
+    // give item a unique ID
+    let itemId = String(Date.now());
+    // get/assign input value
+    let toDoItem = input.value;
+    //pass ID and item into functions
+    addItemToDOM(itemId , toDoItem);
+    addItemToArray(itemId, toDoItem);
+    // clear the input box. (this is default behaviour but we got rid of that)
+    input.value = '';
+  });
 
-  const toggleTaskCompletion = (index) => {
-    const newTasks = tasks.map((task, i) =>
-      i === index ? { ...task, completed: !task.completed } : task
-    );
-    setTasks(newTasks);
-  };
+  ul.addEventListener('click', e => {
+    let id = e.target.getAttribute('data-id')
+    if (!id) return // user clicked in something else
+    //pass id through to functions
+    removeItemFromDOM(id);
+    removeItemFromArray(id);
+  });
 
-  const deleteTask = (index) => {
-    const newTasks = tasks.filter((_, i) => i !== index);
-    setTasks(newTasks);
-  };
+  // functions
+  function addItemToDOM(itemId, toDoItem) {
+    // create an li
+    const li = document.createElement('li')
+    li.setAttribute("data-id", itemId);
+    // add toDoItem text to li
+    li.innerText = toDoItem
+    // add li to the DOM
+    ul.appendChild(li);
+  }
 
-  const editTask = (index) => {
-    setTaskInput(tasks[index].text);
-    setEditingTask(index);
-  };
+  function addItemToArray(itemId, toDoItem) {
+    // add item to array as an object with an ID so we can find and delete it later
+    toDoListArray.push({ itemId, toDoItem});
+    console.log(toDoListArray)
+  }
 
-  const saveTask = (e) => {
-    e.preventDefault();
-    if (taskInput.trim() === "") return;
-    const newTasks = tasks.map((task, i) =>
-      i === editingTask ? { ...task, text: taskInput } : task
-    );
-    setTasks(newTasks);
-    setTaskInput("");
-    setEditingTask(null);
-  };
+  function removeItemFromDOM(id) {
+    // get the list item by data ID
+    var li = document.querySelector('[data-id="' + id + '"]');
+    // remove list item
+    ul.removeChild(li);
+  }
 
-  return (
-    <div className="container">
-      <h1>To-Do List</h1>
-      <form onSubmit={editingTask !== null ? saveTask : addTask}>
-        <input
-          type="text"
-          value={taskInput}
-          onChange={handleInputChange}
-          placeholder="Add a new task"
-        />
-        <button type="submit">{editingTask !== null ? "Save" : "Add"}</button>
-      </form>
-      <ul>
-        {tasks.map((task, index) => (
-          <li key={index} className={task.completed ? "completed" : ""}>
-            <span onClick={() => toggleTaskCompletion(index)}>
-              {task.text}
-            </span>
-            <div>
-              <button className="edit-btn" onClick={() => editTask(index)}>
-                Edit
-              </button>
-              <button className="delete-btn" onClick={() => deleteTask(index)}>
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+  function removeItemFromArray(id) {
+    // create a new toDoListArray with all li's that don't match the ID
+    toDoListArray = toDoListArray.filter(item => item.itemId !== id);
+    console.log(toDoListArray);
+  }
 
-ReactDOM.render(<App />, document.getElementById("root"));
-
+})();
 
