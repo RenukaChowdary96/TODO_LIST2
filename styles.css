@@ -86,4 +86,8 @@ li.completed {
 .delete-btn:hover {
   background-color: #c82333;
 }
+.completed {
+  text-decoration: line-through;
+  color: #aaa;
+}
 
